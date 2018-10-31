@@ -9,42 +9,82 @@
   };
   firebase.initializeApp(config);
 
-var database = firebase.database();
-var username = null;
+  var database = firebase.database();
+  var username = null;
+  var input_message = $("#input_message");
 
-$("#submit").on("click",function(){
-    event.preventDefault();
-    var input_message = $("#input_message");
-    var input = input_message.val();
-    if(username == null){
-        username = input; 
-        input_message.attr("placeholder","Enter your message");
-    }else{
-        message = username + ": " + input; 
-        message = getTimeStamp() + " " + message;
-        database.ref().push(message);
+//check localStorage get username from chatapp
+if(localStorage.chatappUsername == undefined){
+    input_message.attr("placeholder","Enter your name.");
+}else{
+    username=localStorage.chatappUsername;
+    input_message.attr("placeholder","Enter your message");
+}
 
-    }
-    input_message.val("");
+//get all chatrooms
+//create options
+database.ref("chatroom").once("value").then(function(snapshot){
+     var chatRoomIds = Object.keys(snapshot.val());
+     chatRoomIds.forEach(function(chatRoomId){
+         var option = $("<option>",{value:chatRoomId, text:chatRoomId});
+         $("#chat_rooms_options").append(option);
+     })
+     
 });
 
-
-database.ref().on("value",function(snapshot){
-    var messages = "";
-    $("#chat_box").empty();
-
-    for(var item in snapshot.val()){
-        messages = messages + snapshot.val()[item]+ "<br>";
-        $("#chat_box").html(messages);
+//get all chatrooms
+//create options
+database.ref("members").once("value").then(function(snapshot){
+    var members = snapshot.val();
+    for ( var member in members){
+        var option = $("<option>",{value:member, text:member});
+        $("#members").append(option);
     }
     
 });
 
-function getTimeStamp(){
+$("#submit").on("click",function(){
+    event.preventDefault();
+    var chatroom = "messages/" + $("#chat_rooms_options").val();
+    var input = input_message.val();
     var today = new Date();
-    var month = today.getMonth();
-    var day = today.getDate();
-    var hour = today.getHours();
-    var minute = today.getMinutes();
+    var timestamp = today.getTime();
+    //set username 
+    if(username == null){
+        username = input; 
+        localStorage.chatappUsername = input;
+        input_message.attr("placeholder","Enter your message");
+    }else{
+        var post = {
+            username: username,
+            timestamp: timestamp,
+            message: input
+        }
+        database.ref(chatroom).push(post)
+    }
+    input_message.val("");
+});
+
+//Display messages from selected chatroom.
+database.ref("messages/one").on("child_added",function(snapshot){
+    var messages = snapshot.val();
+    var timestamp = messages.timestamp;
+    var username = messages.username;
+    var message = messages.message;
+    var post = getTimeStamp(timestamp) + " " + username + " " + message + "<br>";
+    //$("#chat_box").empty();
+
+    $("#chat_box").append(post);
+
+    
+});
+
+function getTimeStamp(timestamp){
+
+    var date = new Date(timestamp);
+    var month = date.getMonth();
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
     return month + "-" + day + " " + hour + ":" + minute; 
 }
