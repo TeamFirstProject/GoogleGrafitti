@@ -12,7 +12,10 @@
   var database = firebase.database();
   var username = null;
   var input_message = $("#input_message");
+  var currentChatRoom = "one";
 
+  renderChatAppOptions("chatroom","chatroom");
+  renderChatAppOptions("members","members");
 //check localStorage get username from chatapp
 if(localStorage.chatappUsername == undefined){
     input_message.attr("placeholder","Enter your name.");
@@ -21,27 +24,33 @@ if(localStorage.chatappUsername == undefined){
     input_message.attr("placeholder","Enter your message");
 }
 
-//get all chatrooms
-//create options
-database.ref("chatroom").once("value").then(function(snapshot){
-     var chatRoomIds = Object.keys(snapshot.val());
-     chatRoomIds.forEach(function(chatRoomId){
-         var option = $("<option>",{value:chatRoomId, text:chatRoomId});
-         $("#chat_rooms_options").append(option);
-     })
-     
-});
+//update chatroom message when user select another chatroom.
+$("#chatroom").on("change",function(){
+    currentChatRoom = $("#chatroom").val();
+    database.ref("messages/"+currentChatRoom).once("value").then(function(snapshot){
+        //this get multiple messages in one return.
+        var messages = snapshot.val();
+        var newLine = $("<br>");
+        for(var key in messages){
+            var item = messages[key];
+            item.timestamp;
+            item.username;
+            item.message;
+            var post = $("<span>");
+            
+            if(item.username == localStorage.chatappUsername){
+                post.css("float","right");
+            }else{
+                post.css("float","left");
+            }
+            post.text(getTimeStamp(item.timestamp) + " " + item.username + " " + item.message);
+            //$("#chat_box").empty();
 
-//get all chatrooms
-//create options
-database.ref("members").once("value").then(function(snapshot){
-    var members = snapshot.val();
-    for ( var member in members){
-        var option = $("<option>",{value:member, text:member});
-        $("#members").append(option);
-    }
-    
-});
+            $("#chat_box").append(post);
+            $("#chat_box").append(newLine);
+        }
+    });
+})
 
 $("#submit").on("click",function(){
     event.preventDefault();
@@ -66,12 +75,13 @@ $("#submit").on("click",function(){
 });
 
 //Display messages from selected chatroom.
-database.ref("messages/one").on("child_added",function(snapshot){
+database.ref(("messages/"+ currentChatRoom)).on("child_added",function(snapshot){
     var messages = snapshot.val();
     var timestamp = messages.timestamp;
     var username = messages.username;
     var message = messages.message;
     var post = $("<span>");
+    var newLine = $("<br>");
     if(username == localStorage.chatappUsername){
         post.css("float","right");
     }else{
@@ -81,9 +91,22 @@ database.ref("messages/one").on("child_added",function(snapshot){
     //$("#chat_box").empty();
 
     $("#chat_box").append(post);
+    $("#chat_box").append(newLine);
 
-    
 });
+
+function createChatRoom(chatRoomName,x,y){
+    var path = "chatroom/" + chatRoomName;
+    var param = {
+        x: x,
+        y: y,
+        title: chatRoomName
+    }
+    
+    database.ref(path).update(param);
+    //refresh chatroom selections.
+    renderChatAppOptions("chatroom","chatroom");
+}
 
 function getTimeStamp(timestamp){
 
@@ -94,3 +117,23 @@ function getTimeStamp(timestamp){
     var minute = date.getMinutes();
     return month + "-" + day + " " + hour + ":" + minute; 
 }
+
+//get all chatrooms.
+//create options;
+// group such as chatroom or members.
+function renderChatAppOptions(group,class_name){
+    database.ref(group).once("value").then(function(snapshot){
+        var chatRoomIds = Object.keys(snapshot.val());
+        class_name = "#"+class_name;
+        $(class_name).empty();
+        chatRoomIds.forEach(function(chatRoomId){
+            var option = $("<option>",{value:chatRoomId, text:chatRoomId});
+            
+            $(class_name).append(option);
+        })
+        
+    });
+    currentChatRoom = $("#chatroom").val();
+}
+
+
