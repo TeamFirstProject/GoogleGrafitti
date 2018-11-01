@@ -71,7 +71,13 @@ database.ref("messages/one").on("child_added",function(snapshot){
     var timestamp = messages.timestamp;
     var username = messages.username;
     var message = messages.message;
-    var post = getTimeStamp(timestamp) + " " + username + " " + message + "<br>";
+    var post = $("<span>");
+    if(username == localStorage.chatappUsername){
+        post.css("float","right");
+    }else{
+        post.css("float","left");
+    }
+    post.text(getTimeStamp(timestamp) + " " + username + " " + message);
     //$("#chat_box").empty();
 
     $("#chat_box").append(post);
