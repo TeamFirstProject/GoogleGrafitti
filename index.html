@@ -18,13 +18,23 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="mapdisplay">
-                    MAP GOES HERE
+                <div id="map" class="mapdisplay">
+                    <script>
+                        var map;
+                        function initMap() {
+                          map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: 37.773972, lng: -122.431297},
+                            zoom: 9
+                          });
+                        }
+                      </script>
+                      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqA3v-3-SW-PcgVMC1ReWqbePnVnSvPsA&callback=initMap"
+                      async defer></script>
                 </div>
             </div>
 
             <div class="col">
-                <div id="map" class="mapinfodisplay"></div>
+                <div class="mapinfodisplay"></div>
                 MAP INFO GOES HERE
             </div>
         </div>
