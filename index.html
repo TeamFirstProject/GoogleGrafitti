@@ -20,33 +20,39 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="mapdisplay">
-                    MAP GOES HERE
+                <div id="floating-panel">
+                    <input onclick="clearMarkers();" type=button value="Hide Markers">
+                    <input onclick="showMarkers();" type=button value="Show All Markers">
+                    <input onclick="deleteMarkers();" type=button value="Delete Markers">
+                </div>
+                <div id="map" class="mapdisplay">
+                    <p>Click on the map to add markers.</p>
                 </div>
             </div>
 
             <div class="col">
-                <div class="mapinfodisplay">
-                    MAP INFO GOES HERE
-                </div>
+                <div class="mapinfodisplay"></div>
+                MAP INFO GOES HERE
             </div>
         </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="container messagedisplay">
-                    <select name="chat_rooms" id="chat_rooms_options">
-                    </select>
-                    <select name="members" id="members">
-                    </select>  
-                    <div id="chat_box" style="width:250px; height:500px"></div>
-                    <input type="text" id="input_message" class="form-control" placeholder="enter your name first">
-                    <button type="button" id="submit">Enter</button>
-                  </div>
-            </div>
-        </div>
-
     </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="container messagedisplay">
+                <select name="chat_rooms" id="chat_rooms_options">
+                </select>
+                <select name="members" id="members">
+                </select>
+                <div id="chat_box" style="width:250px; height:500px"></div>
+                <input type="text" id="input_message" class="form-control" placeholder="enter your name first">
+                <button type="button" id="submit">Enter</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqA3v-3-SW-PcgVMC1ReWqbePnVnSvPsA&callback=initMap"
+        async defer>
+        </script>
     <script src="assets/javascript/chat.js"></script>
 </body>
 
