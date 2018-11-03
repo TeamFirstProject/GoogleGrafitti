@@ -1,6 +1,7 @@
 var map;
 var markers = [];
 
+
 function initMap() {
     var haightAshbury = { lat: 37.769, lng: -122.446 };
     var goldenGatePark = { lat: 37.769, lng: -122.486 };
@@ -34,6 +35,11 @@ function addMarker(location) {
         map: map
     });
     markers.push(marker);
+
+    marker.addListener("click", function() {
+        console.log('hello');
+
+    });
 }
 
 // Sets the map on all markers in the array.
