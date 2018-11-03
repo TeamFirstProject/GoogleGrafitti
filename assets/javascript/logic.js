@@ -39,6 +39,8 @@ function addMarker(location) {
     marker.addListener("click", function() {
         console.log('hello');
 
+
+
     });
 }
 
