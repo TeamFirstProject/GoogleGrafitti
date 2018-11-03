@@ -25,6 +25,23 @@ function initMap() {
     addMarker(pier39);
     addMarker(salesForceTower);
 
+    var marker = new google.maps.Marker({
+        position: goldenGatePark,
+        map: map,
+        title: "Click to zoom"
+    });
+
+    map.addListener("center_changed", function() {
+        window.setTimeout(function() {
+            map.panTo(marker.getPosition());
+        }, 3000);
+    })
+
+    marker.addListener("click", function() {
+        map.setZoom(15);
+        map.setCenter(marker.getPosition())
+    })
+
 }
 
 // Adds a marker to the map and push to the array.
