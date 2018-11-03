@@ -7,7 +7,7 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: haightAshbury,
-    mapTypeId: 'terrain'
+    mapTypeId: 'roadmap'
   });
 
   // This event listener will call addMarker() when the map is clicked.
