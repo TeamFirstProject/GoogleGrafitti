@@ -38,7 +38,9 @@ function addMarker(location) {
 
     marker.addListener("click", function() {
         console.log('hello');
-
+        var lat = marker.getPosition().lat();
+        var lng = marker.getPosition().lng();
+        console.log(lat, lng);
 
 
     });
