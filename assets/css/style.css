@@ -1,5 +1,7 @@
 /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
+
+/* element that contains the map. */
+
        #map {
         position: relative;
         max-height: 100%;
@@ -12,8 +14,9 @@
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
-        margin: 0;
+        margin: 0 auto;
         padding: 0;
+        width: 100%;
         max-width: 720px;
       }
 
@@ -33,15 +36,16 @@
       }
 
       .messagedisplay {
-        height: 400px;
+        height: 370px;
         margin: 0 auto;
         overflow: hidden;
         border: solid 1px #ccc;
         border-radius: 5px;
+        position: relative;
       }
 
       #chat_box { 
-        height:330px;
+        height:300px;
         width: 100%;
         overflow: auto;        
       }
@@ -50,7 +54,9 @@
         width: 100%;
         border: 1px black;
         font-size: 30px;
-        padding: 10px;
+        padding: 20px 0px;
+        margin: 3px 0px;
+        bottom: 0;
       }
 
       #submit {
@@ -62,13 +68,28 @@
       }
 
       .usermessage {
-        color: blue;
+        color: white;
         text-align: right;
+        background-color: lightblue;
+        width: 200px;
+        padding-right: 10px;
+        position: relative;
+        margin-left: 250px;
+        z-index: -1;
+        border-radius: 4px;
+        margin-bottom: 10px;
       }
 
       .nonusermessage {
-        color: black;
+        color: white;
         text-align: left;
+        background-color: lightgreen;
+        width: 200px;
+        padding-left: 10px;
+        position: relative;
+        z-index: -1;
+        border-radius: 4px;
+        margin-bottom: 10px;
       }
 
       .p {
