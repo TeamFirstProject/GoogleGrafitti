@@ -27,7 +27,7 @@ if(localStorage.chatappUsername == undefined){
 $("#chatroom").on("change",function(){
     currentChatRoom = $("#chatroom").val();
     $("#chat_box").empty();
-    database.ref("messages/"+currentChatRoom).once("value").then(function(snapshot){
+    database.ref("messages/"+currentChatRoom).limitToLast(10).once("value").then(function(snapshot){
         //this get multiple messages in one return.
         var messages = snapshot.val();
         for(var key in messages){
@@ -40,26 +40,26 @@ $("#chatroom").on("change",function(){
 })
 
 //insert message into firebase.
-$("#submit").on("click",function(){
+$("form").submit(function(){
     event.preventDefault();
-    var chatroom = "messages/" + $("#chatroom").val();
-    var input = input_message.val();
-    var today = new Date();
-    var timestamp = today.getTime();
-    //set username 
-    if(username == null){
-        username = input; 
-        localStorage.chatappUsername = input;
-        input_message.attr("placeholder","Enter your message");
-    }else{
-        var post = {
-            username: username,
-            timestamp: timestamp,
-            message: input
+        var chatroom = "messages/" + $("#chatroom").val();
+        var input = input_message.val();
+        var today = new Date();
+        var timestamp = today.getTime();
+        //set username 
+        if(username == null){
+            username = input; 
+            localStorage.chatappUsername = input;
+            input_message.attr("placeholder","Enter your message");
+        }else{
+            var post = {
+                username: username,
+                timestamp: timestamp,
+                message: input
+            }
+            database.ref(chatroom).push(post)
         }
-        database.ref(chatroom).push(post)
-    }
-    input_message.val("");
+        input_message.val("");
 });
 
 //set listener to pick up new messages, only display message that belong to current chatroom.
@@ -67,7 +67,7 @@ function setDBListener(chatRoomId){
 
     var chatroom = "messages/" + chatRoomId;
     //Display messages from selected chatroom.
-    database.ref((chatroom)).on("child_added",function(snapshot){
+    database.ref((chatroom)).limitToLast(10).on("child_added",function(snapshot){
         var snapshotValue = snapshot.val();
         var param = {
                     timestamp: snapshotValue.timestamp,
