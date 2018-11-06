@@ -1,7 +1,6 @@
 var map;
 var markers = [];
 
-
 function initMap() {
     var haightAshbury = { lat: 37.769, lng: -122.446 };
     var goldenGatePark = { lat: 37.769, lng: -122.486 };
@@ -31,14 +30,25 @@ function initMap() {
 
 // Adds a marker to the map and push to the array.
 function addMarker(location) {
+    var geocoder = new google.maps.Geocoder;
     var marker = new google.maps.Marker({
         position: location,
         map: map
     });
+    geocoder.geocode({'location': location},function(results,status){
+        //
+        if(status ==='OK'){
+            var chatRoomName = results[0].formatted_address;
+            var lat = results[0].geometry.location.lat();
+            var lng = results[0].geometry.location.lng();
+            createChatRoom(chatRoomName,lat,lng);
+        }
+    });
+
     markers.push(marker);
+    
 
     marker.addListener("click", function() {
-        console.log('hello');
         changeChatRoom(this.position.lat(), this.position.lng());
     });
 }

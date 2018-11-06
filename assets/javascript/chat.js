@@ -14,7 +14,6 @@
   var input_message = $("#input_message");
   renderChatAppOptions("chatroom","chatroom");
  
-  //renderChatAppOptions("members","members");
 //check localStorage get username from chatapp
 if(localStorage.chatappUsername == undefined){
     input_message.attr("placeholder","Enter your name.");
@@ -84,16 +83,24 @@ function setDBListener(chatRoomId){
 
 //Not in use since we are creating new chatrooms from Google Map marker.
 function createChatRoom(chatRoomName,x,y){
+    var coord = x.toFixed(3).toString() + "," + y.toFixed(3).toString();
     var path = "chatroom/" + chatRoomName;
     var param = {
+        coord:coord,
         x: x,
         y: y,
         title: chatRoomName
     }
-    
+    database.ref("chatroom").orderByChild("coord").equalTo(coord).on("value",function(snapshot){
+        return snapshot.val();
+    });
     database.ref(path).update(param);
-    //refresh chatroom selections.
-    renderChatAppOptions("chatroom","chatroom");
+    setDBListener(chatRoomName);
+
+    //add option into chatroom selection.
+    var option = $("<option>",{value:chatRoomName, text:chatRoomName}).prop('selected', true);
+    $("#chatroom").append(option);   
+    
 }
 
 //set timestamp for the messages in chatbox.
@@ -108,16 +115,10 @@ function getTimeStamp(timestamp){
 function renderChatAppOptions(group,class_name){
     database.ref(group).once("value").then(function(snapshot){
         var chatRoomIds = Object.keys(snapshot.val());
-        class_name = "#"+class_name;
-        $(class_name).empty();
         for ( var i = 0; i < chatRoomIds.length;i++){
             var currentChatRoom = snapshot.val()[chatRoomIds[i]];        
-            var option = $("<option>",{value:chatRoomIds[i], text:chatRoomIds[i]});
             addMarker({lat:currentChatRoom.x,lng:currentChatRoom.y})
-            $(class_name).append(option);
-            setDBListener(chatRoomIds[i]);
-        }
-        
+        }        
     });
     
 }
