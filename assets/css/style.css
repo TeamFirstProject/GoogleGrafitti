@@ -60,3 +60,17 @@
       .row {
         margin-bottom: 20px;
       }
+
+      .usermessage {
+        color: blue;
+        text-align: right;
+      }
+
+      .nonusermessage {
+        color: black;
+        text-align: left;
+      }
+
+      .p {
+        font-family: 'Open Sans', sans-serif;
+      }

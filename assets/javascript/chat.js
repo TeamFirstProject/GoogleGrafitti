@@ -37,12 +37,12 @@ $("#chatroom").on("change",function(){
             item.timestamp;
             item.username;
             item.message;
-            var post = $("<div>");
+            var post = $("<p>");
             
             if(item.username == localStorage.chatappUsername){
-                post.css("text-align","right");
+                post.addClass("usermessage");
             }else{
-                post.css("text-align","left");
+                post.addClass("nonusermessage");
             }
             post.text(getTimeStamp(item.timestamp) + " " + item.username + " " + item.message);
             //$("#chat_box").empty();
