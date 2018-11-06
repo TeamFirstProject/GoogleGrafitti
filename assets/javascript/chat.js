@@ -12,7 +12,6 @@
   var database = firebase.database();
   var username = null;
   var input_message = $("#input_message");
-  var currentChatRoom = "one";
   renderChatAppOptions("chatroom","chatroom");
  
   //renderChatAppOptions("members","members");
@@ -31,30 +30,16 @@ $("#chatroom").on("change",function(){
     database.ref("messages/"+currentChatRoom).once("value").then(function(snapshot){
         //this get multiple messages in one return.
         var messages = snapshot.val();
-        var newLine = $("<br>");
         for(var key in messages){
             var item = messages[key];
-            item.timestamp;
-            item.username;
-            item.message;
-            var post = $("<div>");
-            
-            if(item.username == localStorage.chatappUsername){
-                post.css("text-align","right");
-            }else{
-                post.css("text-align","left");
-            }
-            post.text(getTimeStamp(item.timestamp) + " " + item.username + " " + item.message);
-            //$("#chat_box").empty();
-
-            $("#chat_box").append(post);
-            $("#chat_box").append(newLine);
+            var message = renderMessage(item);
+            $("#chat_box").append(message);
         }
     });
-    //attach listener.
     
 })
 
+//insert message into firebase.
 $("#submit").on("click",function(){
     event.preventDefault();
     var chatroom = "messages/" + $("#chatroom").val();
@@ -77,48 +62,27 @@ $("#submit").on("click",function(){
     input_message.val("");
 });
 
-//Display messages from selected chatroom.
-database.ref(("messages/one")).on("child_added",function(snapshot){
-    if(currentChatRoom == "Dennis' Room"){
-        var messages = snapshot.val();
-        var timestamp = messages.timestamp;
-        var username = messages.username;
-        var message = messages.message;
-        var post = $("<span>");
-        var newLine = $("<br>");
-        if(username == localStorage.chatappUsername){
-            post.css("float","right");
-        }else{
-            post.css("float","left");
+//set listener to pick up new messages, only display message that belong to current chatroom.
+function setDBListener(chatRoomId){
+
+    var chatroom = "messages/" + chatRoomId;
+    //Display messages from selected chatroom.
+    database.ref((chatroom)).on("child_added",function(snapshot){
+        var snapshotValue = snapshot.val();
+        var param = {
+                    timestamp: snapshotValue.timestamp,
+                    username: snapshotValue.username,
+                    message: snapshotValue.message}
+        var chatroom = snapshot.ref.path.pieces_[1]
+        var message = renderMessage(param);
+        //not best practice to load all the messages.
+        if(chatroom == $("#chatroom").val()){
+            $("#chat_box").append(message);
         }
-        post.text(getTimeStamp(timestamp) + " " + username + " " + message);
+    });
+}
 
-        $("#chat_box").append(post);
-        $("#chat_box").append(newLine);
-    }
-});
-
-//Display messages from selected chatroom.
-database.ref(("messages/Dennis' Room")).on("child_added",function(snapshot){
-    if(currentChatRoom == "Dennis' Room"){
-        var messages = snapshot.val();
-        var timestamp = messages.timestamp;
-        var username = messages.username;
-        var message = messages.message;
-        var post = $("<span>");
-        var newLine = $("<br>");
-        if(username == localStorage.chatappUsername){
-            post.css("float","right");
-        }else{
-            post.css("float","left");
-        }
-        post.text(getTimeStamp(timestamp) + " " + username + " " + message);
-    
-        $("#chat_box").append(post);
-        $("#chat_box").append(newLine);
-    }
-});
-
+//Not in use since we are creating new chatrooms from Google Map marker.
 function createChatRoom(chatRoomName,x,y){
     var path = "chatroom/" + chatRoomName;
     var param = {
@@ -132,56 +96,71 @@ function createChatRoom(chatRoomName,x,y){
     renderChatAppOptions("chatroom","chatroom");
 }
 
+//set timestamp for the messages in chatbox.
 function getTimeStamp(timestamp){
 
     var date = new Date(timestamp);
-    var month = date.getMonth();
-    var day = date.getDate();
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    return month + "-" + day + " " + hour + ":" + minute; 
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString(); 
 }
 
 //get all chatrooms.
-//create options;
-// group such as chatroom or members.
+//create option element for each chatroom.
 function renderChatAppOptions(group,class_name){
     database.ref(group).once("value").then(function(snapshot){
         var chatRoomIds = Object.keys(snapshot.val());
         class_name = "#"+class_name;
         $(class_name).empty();
         for ( var i = 0; i < chatRoomIds.length;i++){
-            currentChatRoom = snapshot.val()[chatRoomIds[i]];        
+            var currentChatRoom = snapshot.val()[chatRoomIds[i]];        
             var option = $("<option>",{value:chatRoomIds[i], text:chatRoomIds[i]});
             addMarker({lat:currentChatRoom.x,lng:currentChatRoom.y})
             $(class_name).append(option);
+            setDBListener(chatRoomIds[i]);
         }
         
     });
-    currentChatRoom = $("#chatroom").val();
     
 }
 
-//put messages from chatroom
-//Call initially seem to happen before select element for chatroom finish loading. 
-function getMessages(){
+//get username,timestamp and message, convert them into HTML element.
+function renderMessage(param){
+    var message = $("<div>");
+    var idDiv = $("<div>").text(getTimeStamp(param.timestamp));
+    idDiv.css("font-size","10px");
+    var messageDiv = $("<div>");
+    var usernameDiv = $("<div>").css("font-size","12px");;
+    usernameDiv
+    if(param.username == localStorage.chatappUsername){
+        message.css("text-align","right");
+        messageDiv.text(param.message);
+        usernameDiv.text(param.username);
+    }else{
+        message.css("text-align","left");
+        messageDiv.text(param.message);
+        usernameDiv.text(param.username);
+    }
+    message.append(idDiv);
+    message.append(messageDiv);
+    message.append(usernameDiv);
+    return message;
+}
 
-    database.ref("messages/" + $("#chatroom").val()).once("value").then(function(snapshot){
-    
-        var messages = snapshot.val();
-        var timestamp = messages.timestamp;
-        var username = messages.username;
-        var message = messages.message;
-        var post = $("<span>");
-        var newLine = $("<br>");
-        if(username == localStorage.chatappUsername){
-            post.css("float","right");
-        }else{
-            post.css("float","left");
-        }
-        post.text(getTimeStamp(timestamp) + " " + username + " " + message);
-
-        $("#chat_box").append(post);
-        $("#chat_box").append(newLine);
-    });
+//switch chatroom. Taken lat, long from Google Map Marker.
+function changeChatRoom(x, y){
+    var coord = x.toFixed(3).toString() + "," + y.toFixed(3).toString();
+    database.ref("chatroom").orderByChild("coord").equalTo(coord).on("child_added",function(snapshot)
+    {
+        var chatRoom = snapshot.ref.path.pieces_[1];
+        $("#chatroom").val(chatRoom);
+        $("#chat_box").empty();
+        database.ref("messages/"+chatRoom).once("value").then(function(snapshot){
+            //this get multiple messages in one return.
+            var messages = snapshot.val();
+            for(var key in messages){
+                var item = messages[key];
+                var message = renderMessage(item);
+                $("#chat_box").append(message);
+            }
+        });
+    })
 }
