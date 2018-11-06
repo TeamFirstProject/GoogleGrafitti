@@ -84,8 +84,10 @@ function setDBListener(chatRoomId){
 
 //Not in use since we are creating new chatrooms from Google Map marker.
 function createChatRoom(chatRoomName,x,y){
+    var coord = x.toFixed(3).toString() + "," + y.toFixed(3).toString();
     var path = "chatroom/" + chatRoomName;
     var param = {
+        coord: coord,
         x: x,
         y: y,
         title: chatRoomName
