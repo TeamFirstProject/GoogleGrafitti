@@ -20,11 +20,12 @@ function initMap() {
     });
 
     // Adds a marker at the center of the map.
-    addMarker(haightAshbury);
-    addMarker(goldenGatePark);
-    addMarker(japaneseGarden);
-    addMarker(pier39);
-    addMarker(salesForceTower);
+    //Markers will be render when load each chatroom.
+    //addMarker(haightAshbury);
+    //addMarker(goldenGatePark);
+    //addMarker(japaneseGarden);
+    //addMarker(pier39);
+    //addMarker(salesForceTower);
 
 }
 
@@ -38,11 +39,7 @@ function addMarker(location) {
 
     marker.addListener("click", function() {
         console.log('hello');
-        var lat = marker.getPosition().lat();
-        var lng = marker.getPosition().lng();
-        console.log(lat, lng);
-
-
+        changeChatRoom(this.position.lat(), this.position.lng());
     });
 }
 
