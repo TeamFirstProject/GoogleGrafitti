@@ -47,7 +47,15 @@
       #chat_box { 
         height:300px;
         width: 100%;
-        overflow: auto;        
+        overflow: auto;       
+      }
+
+      #logo{
+        opacity: 0.1;
+        position:absolute;
+        left: 175px;
+        width:300px; 
+        height:300px;
       }
 
       #input_message {
