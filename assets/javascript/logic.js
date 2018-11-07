@@ -1,5 +1,12 @@
 var map;
 var markers = [];
+var icon1 ="https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png"
+var activeIcon ="./assets/images/spotlight-poi2_green.png"
+var hoverIcon ="./assets/images/spotlight-poi2_yellow.png"
+
+
+
+
 
 
 function initMap() {
@@ -19,6 +26,8 @@ function initMap() {
         addMarker(event.latLng);
     });
 
+    
+
     // Adds a marker at the center of the map.
     //Markers will be render when load each chatroom.
     //addMarker(haightAshbury);
@@ -35,6 +44,15 @@ function addMarker(location) {
         position: location,
         map: map
     });
+
+    google.maps.event.addListener(marker, "mouseover", function(){
+        marker.setIcon(hoverIcon);
+    });
+
+    google.maps.event.addListener(marker, 'mouseout', function() {
+        marker.setIcon(icon1);
+    });
+
     markers.push(marker);
 
     marker.addListener("click", function() {
