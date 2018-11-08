@@ -2,7 +2,7 @@
 
 ![Google Graffiti Logo](assets/images/google_graffiti_logo.png)
 
-[Google Grafitti](https://teamfirstproject.github.io/GoogleGrafitti/) is a group project for UC Berekely Extended Education coding camp, created by [Dennis Tam](https://github.com/saikay), [Harry Neakok](https://github.com/Harryneakok), [Joshua Moore](https://github.com/joshmoore2003), and [Justin Honegger](https://github.com/Skarrg).
+[Google Grafitti](https://teamfirstproject.github.io/GoogleGrafitti/) is a group project for UC Berekely Extended Education coding camp, created by [Dennis Tam](https://github.com/saikay), [Harry Neakok](https://github.com/Harryneakok), [Joshua Moore](https://github.com/joshmoore2003), and [Justin Honegger](https://github.com/Skarrggit).
 
 The goal of the project was to make a simple, location-based chat program. To accomplish this, we used Google API and Firebase as a chat backend.
 
