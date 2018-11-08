@@ -1,5 +1,7 @@
 var map;
 var markers = [];
+var icon1 = "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png"
+var icon2 = "./assets/images/spotlight-poi2-yellow.png"
 
 function initMap() {
     var haightAshbury = { lat: 37.769, lng: -122.446 };
@@ -35,6 +37,14 @@ function addMarker(location) {
         position: location,
         map: map
     });
+
+    google.maps.event.addListener(marker, 'mouseover', function() {
+        marker.setIcon(icon2);
+    });
+    google.maps.event.addListener(marker, 'mouseout', function() {
+        marker.setIcon(icon1);
+    });
+
     geocoder.geocode({'location': location},function(results,status){
         //
         if(status ==='OK'){
