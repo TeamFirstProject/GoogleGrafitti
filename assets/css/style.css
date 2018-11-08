@@ -55,9 +55,10 @@ html, body {
 #logo{
   opacity: 0.1;
   position:absolute;
-  left: 175px;
+  left: 200px;
   width:300px; 
   height:300px;
+  top: 20px;
 }
 
 #chatroom {
