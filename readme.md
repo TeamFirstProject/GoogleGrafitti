@@ -10,8 +10,6 @@ The user can click on any of the Google Maps markers existing on the screen and 
 
 Supplementary links:
 
-*[Project Presentation](https://docs.google.com/presentation/d/1Rwv2XuF_TnyRve9qnTL6SF9_FZHvjptNy1e0zz0J4PU/edit?userstoinvite=hcneakok@gmail.com&ts=5be3a2f7&actionButton=1#slide=id.g46cca724e4_0_131)
-
-*[Trello Board](https://trello.com/b/7Sr8nISU/project-tasks)
-
-*[Project Proposal Document](https://docs.google.com/document/d/1v7cyyp4mj83Fq8L1GIzlf53qp43P5S8eSyHVPy8vhm4/edit#heading=h.2gazcsgmxkub)
+-[Project Presentation](https://docs.google.com/presentation/d/1Rwv2XuF_TnyRve9qnTL6SF9_FZHvjptNy1e0zz0J4PU/edit?userstoinvite=hcneakok@gmail.com&ts=5be3a2f7&actionButton=1#slide=id.g46cca724e4_0_131)
+-[Trello Board](https://trello.com/b/7Sr8nISU/project-tasks)
+-[Project Proposal Document](https://docs.google.com/document/d/1v7cyyp4mj83Fq8L1GIzlf53qp43P5S8eSyHVPy8vhm4/edit#heading=h.2gazcsgmxkub)
