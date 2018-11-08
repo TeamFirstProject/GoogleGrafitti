@@ -66,7 +66,7 @@ function setDBListener(chatRoomId){
 
     var chatroom = "messages/" + chatRoomId;
     //Display messages from selected chatroom.
-    database.ref((chatroom)).limitToLast(10).on("child_added",function(snapshot){
+    database.ref(chatroom).on("child_added",function(snapshot){
         var snapshotValue = snapshot.val();
         var param = {
                     timestamp: snapshotValue.timestamp,
@@ -99,7 +99,8 @@ function createChatRoom(chatRoomName,x,y){
 
     //add option into chatroom selection.
     var option = $("<option>",{value:chatRoomName, text:chatRoomName}).prop('selected', true);
-    $("#chatroom").append(option);   
+    $("#chatroom").append(option);  
+    $("#chat_box").empty(); 
     
 }
 
@@ -117,8 +118,13 @@ function renderChatAppOptions(group,class_name){
         var chatRoomIds = Object.keys(snapshot.val());
         for ( var i = 0; i < chatRoomIds.length;i++){
             var currentChatRoom = snapshot.val()[chatRoomIds[i]];        
-            addMarker({lat:currentChatRoom.x,lng:currentChatRoom.y})
-        }        
+            drawMarker({lat:currentChatRoom.x,lng:currentChatRoom.y});
+            setDBListener(chatRoomIds[i]);
+            //add option into chatroom selection.
+            var option = $("<option>",{value:chatRoomIds[i], text:chatRoomIds[i]}).prop('selected', true);
+            $("#chatroom").append(option);      
+        }   
+
     });
     
 }
@@ -132,13 +138,13 @@ function renderMessage(param){
     var usernameDiv = $("<div>").css("font-size","12px");;
     usernameDiv
     if(param.username == localStorage.chatappUsername){
-        message.css("text-align","right");
         message.addClass("usermessage");
+        message.css("text-align","right");
         messageDiv.text(param.message);
         usernameDiv.text(param.username);
     }else{
-        message.css("text-align","left");
         message.addClass("nonusermessage");
+        message.css("text-align","left");
         messageDiv.text(param.message);
         usernameDiv.text(param.username);
     }

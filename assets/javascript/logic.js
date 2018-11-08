@@ -20,15 +20,28 @@ function initMap() {
         addMarker(event.latLng);
     });
 
-    // Adds a marker at the center of the map.
-    //Markers will be render when load each chatroom.
-    //addMarker(haightAshbury);
-    //addMarker(goldenGatePark);
-    //addMarker(japaneseGarden);
-    //addMarker(pier39);
-    //addMarker(salesForceTower);
-
 }
+
+function drawMarker(location){
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map
+    });
+
+    google.maps.event.addListener(marker, 'mouseover', function() {
+        marker.setIcon(icon2);
+    });
+    google.maps.event.addListener(marker, 'mouseout', function() {
+        marker.setIcon(icon1);
+    });
+
+    markers.push(marker);
+    
+    marker.addListener("click", function() {
+        changeChatRoom(this.position.lat(), this.position.lng());
+    });
+}
+
 
 // Adds a marker to the map and push to the array.
 function addMarker(location) {
