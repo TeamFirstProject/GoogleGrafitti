@@ -133,10 +133,12 @@ function renderMessage(param){
     usernameDiv
     if(param.username == localStorage.chatappUsername){
         message.css("text-align","right");
+        message.addClass("usermessage");
         messageDiv.text(param.message);
         usernameDiv.text(param.username);
     }else{
         message.css("text-align","left");
+        message.addClass("nonusermessage");
         messageDiv.text(param.message);
         usernameDiv.text(param.username);
     }
